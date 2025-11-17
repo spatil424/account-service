@@ -1,10 +1,12 @@
 package org.sumeet.account.exception;
 
+import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +15,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.sumeet.account.dto.ErrorResponseDto;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomerAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDto> handleCustomerAlreadyExistsException(CustomerAlreadyExistsException exception, WebRequest request){
+    public ResponseEntity<ErrorResponseDto> handleCustomerAlreadyExistsException(CustomerAlreadyExistsException exception, WebRequest request) {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 request.getContextPath(),
                 HttpStatus.BAD_REQUEST,
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleResponseNotFoundException(ResourceNotFoundException exception, WebRequest request){
+    public ResponseEntity<ErrorResponseDto> handleResponseNotFoundException(ResourceNotFoundException exception, WebRequest request) {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
                 request.getContextPath(),
                 HttpStatus.BAD_REQUEST,
@@ -57,12 +58,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    public ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,@NonNull HttpStatusCode statusCode, @NonNull WebRequest request) {
         Map<String, String> validationErrors = new HashMap<>();
-        List<FieldError> validationErrorList = Collections.singletonList(ex.getBindingResult().getFieldError());
+        List<ObjectError> validationErrorList = ex.getBindingResult().getAllErrors();
 
-        validationErrorList.forEach(error -> validationErrors.put(error.getField(), error.getDefaultMessage()));
-        return new ResponseEntity<>(validationErrors, status);
+        validationErrorList.forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String validationMsg = error.getDefaultMessage();
+            validationErrors.put(fieldName, validationMsg);
+        });
+        return new ResponseEntity<>(validationErrors, statusCode);
     }
 }
