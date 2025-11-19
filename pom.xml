@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.sumeet</groupId>
     <artifactId>account-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>v1</version>
     <name>account-service</name>
     <description>Microservice for Accounts</description>
     <url/>
@@ -27,7 +27,7 @@
         <url/>
     </scm>
     <properties>
-        <java.version>25</java.version>
+        <java.version>21</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -94,6 +94,16 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <to>
+                        <image>spatil424/${project.artifactId}:${project.version}</image>
+                    </to>
                 </configuration>
             </plugin>
         </plugins>

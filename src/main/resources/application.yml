@@ -23,3 +23,5 @@ logging:
     org.springframework: INFO
     org.sumeet.account: DEBUG
 
+build:
+  version: 3.0
