@@ -18,5 +18,10 @@ spring:
 
 server:
   port: 8081
+logging:
+  level:
+    org.springframework: INFO
+    org.sumeet.account: DEBUG
 
-
+build:
+  version: 3.0

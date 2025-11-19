@@ -25,7 +25,7 @@ public class BaseEntity {
     @Column(updatable = false)
     private String createdBy;
 
-    @Column(name = "updated_by", insertable = false)
+    @Column(name = "updated_at", insertable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
