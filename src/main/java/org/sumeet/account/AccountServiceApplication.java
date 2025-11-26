@@ -12,7 +12,7 @@ import org.sumeet.account.dto.AccountsContactInfoDto;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditAwareImpl")
-@EnableConfigurationProperties(value = AccountsContactInfoDto.class)
+@EnableConfigurationProperties(value = {AccountsContactInfoDto.class})
 @OpenAPIDefinition(
         info = @Info(
                 title = "Accounts microservices REST API Documentation",
