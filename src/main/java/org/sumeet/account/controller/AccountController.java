@@ -26,7 +26,7 @@ import org.sumeet.account.service.IAccountService;
 @RequestMapping("/api")
 @Validated
 public class AccountController {
-
+    @Autowired
     private IAccountService iAccountService;
 
     @Autowired
@@ -38,9 +38,10 @@ public class AccountController {
     @Value("${build.version}")
     private String buildVersion;
 
+    @Autowired
     public AccountController(IAccountService iAccountService) {
         this.iAccountService = iAccountService;
-    }
+  }
 
     @GetMapping("sayHello")
     public String greet(){
@@ -143,7 +144,7 @@ public class AccountController {
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(environment.getProperty("JAVA_HOME"));
+                .body(environment.getProperty("PATH"));
     }
 
     @Operation(

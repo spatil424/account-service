@@ -1,27 +1,52 @@
 spring:
   application:
-    name: account-service
+    name: accounts-service
   datasource:
-    url: jdbc:h2:mem:accountservicedb
-    username: admin
+    url: jdbc:postgresql://localhost:5432/accountsdb
+    username: postgres
     password: admin
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  profiles:
+    active: "prod"
+  config:
+    import: "configserver:http://localhost:8071/"
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      readinessState:
+        enabled: true
+      livenessState:
+        enabled: true
+      probes:
+        enabled: true
 
 server:
   port: 8081
-logging:
-  level:
-    org.springframework: INFO
-    org.sumeet.account: DEBUG
 
 build:
   version: 3.0
+
+accounts:
+  message: "Welcome to DemoBank accounts related local APIs "
+  contactDetails:
+    name: "John Doe - Developer"
+    email: "john@demobank.com"
+  onCallSupport:
+    - (555) 555-1234
+    - (555) 523-1345
