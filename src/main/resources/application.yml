@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/accountsdb
     username: postgres
-    password: admin
+    password: test
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -16,18 +16,23 @@ spring:
     active: "prod"
   config:
     import: "configserver:http://localhost:8071/"
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    username: guest
-    password: guest
+#  rabbitmq:
+#    host: rabbitmq
+#    port: 5672
+#    username: guest
+#    password: guest
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
   endpoint:
+    shutdown:
+      access: unrestricted
+    info:
+      env:
+        enabled: true
     health:
       readinessState:
         enabled: true
@@ -50,3 +55,17 @@ accounts:
   onCallSupport:
     - (555) 555-1234
     - (555) 523-1345
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+info:
+  app:
+    description: "Accounts Service for DemoBank"
+    version: "1.0.0"
